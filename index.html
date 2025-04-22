@@ -3,16 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Income Tax Comparator</title>
+  <title>Income Tax Regime Comparison - FY 2025–26</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
-    body { font-family: sans-serif; padding: 20px; background: #f5f5f5; }
-    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-    th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
+    body { font-family: sans-serif; padding: 20px; background: #fff; color: #333; }
+    h1, h2 { color: #006699; }
+    ul { margin-bottom: 20px; }
+    table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
     th { background-color: #eee; }
-    .section { margin-top: 30px; }
-    input { width: 100px; }
-    button { margin-top: 20px; padding: 10px 20px; font-size: 16px; }
-    .highlight { font-weight: bold; color: green; font-size: 18px; }
+    nav { margin-bottom: 20px; }
+    nav a { margin-right: 15px; text-decoration: none; color: #006699; }
+    nav a:hover { text-decoration: underline; }
+    canvas { max-width: 600px; margin: 30px auto; display: block; }
   </style>
   <script type='text/javascript' src='//pl26447354.profitableratecpm.com/93/5e/36/935e36c239aaa202a713af14c143ff41.js'></script>
 </head>
@@ -26,178 +29,131 @@
 		'params' : {}
 	};
   </script>
-  <script type="text/javascript" src="//www.highperformanceformat.com/21efdf986f19bef9a137a9fccd78118d/invoke.js"></script>
-  <h1>Income Tax Comparator (Old Regime vs New Regime)</h1>
-  <p> This is a income tax comparator app that helps you compare between the Old Tax Regime and the New Tax Regime for FY 2025–26, allowing you to choose the one that suits you best. </p>
-  <br>
-  <label>Gross Annual Income: ₹ <input type="number" id="grossIncome" value="0"></label>
+  <nav>
+    <a href="index.html">Home</a>
+	<a href="calculate.html" style="background-color: yellow; font-weight: bold; font-family: 'Arial Black', Arial, sans-serif;">Calculate Tax</a>
+  </nav>
 
-  <div class="section">
-    <h2>Deductions</h2>
+  <h1>Old vs New Income Tax Regime (FY 2025–26)</h1>
+
+  <section>
+    <h2>Understanding the Old Tax Regime</h2>
+    <p>The <strong>Old Tax Regime</strong> under the Indian Income Tax Act for FY 2025–26 is designed to reward taxpayers who actively invest and plan their finances using various tax-saving instruments. It allows individuals to reduce their taxable income significantly by claiming a wide range of <strong>income tax deductions</strong> and <strong>exemptions</strong>.</p>
+
+    <p>Under this regime, taxpayers can take advantage of benefits like the <strong>Standard Deduction</strong> of ₹50,000, deductions under <strong>Section 80C</strong> (up to ₹1.5 lakh for LIC, PPF, ELSS, etc.), <strong>Section 80D</strong> (health insurance premiums), <strong>House Rent Allowance (HRA)</strong>, <strong>Leave Travel Allowance (LTA)</strong>, <strong>home loan interest under Section 24</strong>, and many more.</p>
+
+    <p>This tax structure is especially useful for salaried individuals or those with housing loans and medical expenses, as it offers flexibility in <strong>tax planning</strong> and encourages long-term savings. For anyone who maximizes these deductions, the Old Tax Regime often results in lower overall tax liability compared to the new system.</p>
+
+    <h3>Old Tax Regime Slabs (FY 2025–26)</h3>
     <table>
       <thead>
         <tr>
-          <th>Deduction Type</th>
-          <th>Limit</th>
-          <th>Old Regime</th>
-          <th>New Regime</th>
+          <th>Income Range (₹)</th>
+          <th>Tax Rate</th>
         </tr>
       </thead>
-      <tbody id="deductionsTable"></tbody>
+      <tbody>
+        <tr><td>0 – 2,50,000</td><td>0%</td></tr>
+        <tr><td>2,50,001 – 5,00,000</td><td>5%</td></tr>
+        <tr><td>5,00,001 – 10,00,000</td><td>20%</td></tr>
+        <tr><td>Above 10,00,000</td><td>30%</td></tr>
+      </tbody>
     </table>
-  </div>
+  </section>
 
-  <button onclick="update()">Calculate</button>
+  <section>
+    <h2>Understanding the New Tax Regime (FY 2025–26)</h2>
+    <p>The <strong>New Tax Regime</strong> for FY 2025–26 is aimed at simplifying the income tax structure by offering reduced tax rates and minimizing the need for tax-saving investments. It is an attractive option for individuals who prefer convenience and do not wish to claim multiple deductions or exemptions.</p>
 
-  <div class="section">
-    <h2>Results</h2>
-    <p>Old Regime Tax: ₹ <span id="oldTax">0</span></p>
-    <p>New Regime Tax: ₹ <span id="newTax">0</span></p>
-    <p>Net Taxable Income (Old): ₹ <span id="oldTaxable">0</span></p>
-    <p>Net Taxable Income (New): ₹ <span id="newTaxable">0</span></p>
-    <p>Total Deductions (Old): ₹ <span id="totalOldDeduction">0</span></p>
-    <p>Total Deductions (New): ₹ <span id="totalNewDeduction">0</span></p>
-    <p><strong class="highlight">Better Regime: <span id="betterRegime"></span></strong></p>
-    <p><strong class="highlight">You Save: ₹ <span id="savings"></span></strong></p>
-  </div>
+    <p>Taxpayers under the new regime can benefit from a <strong>Standard Deduction</strong> of ₹75,000, but most other deductions like 80C (investments in LIC, PPF, ELSS), 80D (health insurance), HRA, LTA, etc., are not applicable. The system is straightforward and favors those with fewer financial commitments or those who prefer liquidity over locking funds into long-term savings schemes.</p>
 
-  <div class="section">
-    <h2>Tax Breakdown</h2>
-    <p><strong>Old Regime:</strong></p>
-    <ul id="oldBreakdown"></ul>
-    <p><strong>New Regime:</strong></p>
-    <ul id="newBreakdown"></ul>
-  </div>
+    <p>Additionally, the <strong>Section 87A rebate</strong> has been extended up to an annual income of ₹12 lakh, with a maximum rebate of ₹60,000, making income up to ₹12 lakh effectively tax-free for eligible taxpayers. This makes the New Regime highly beneficial for mid-income earners who do not rely heavily on deductions.</p>
 
-  <script>
-    const deductionList = [
-      { name: 'Section 80C (LIC, PPF, ELSS, etc.)', limit: 150000 },
-      { name: 'Section 80D (Health Insurance)', limit: '₹25,000 (₹50,000 for senior citizens)' },
-      { name: 'Section 80E (Education Loan Interest)', limit: 'No limit (up to 8 years)' },
-      { name: 'Section 80G (Donations)', limit: '50% or 100% (conditions apply)' },
-      { name: 'Section 80TTA / 80TTB (Savings Interest)', limit: '₹10,000 (₹50,000 for senior citizens)' },
-      { name: 'Home Loan Interest (Section 24)', limit: 200000 },
-      { name: 'HRA Exemption', limit: 'Based on salary and rent paid' },
-      { name: 'LTA (Leave Travel Allowance)', limit: 'Actual travel cost (2 trips in 4 years)' },
-      { name: 'NPS - Employee Contribution (80CCD(1B))', limit: 50000 },
-      { name: 'NPS - Employer Contribution (80CCD(2))', limit: 'Up to 10% of basic salary + DA' },
-      { name: 'Other Applicable Deductions', limit: 'As applicable' },
-    ];
+    <h3>New Tax Regime Slabs (FY 2025–26)</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Income Range (₹)</th>
+          <th>Tax Rate</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>0 – 4,00,000</td><td>0%</td></tr>
+        <tr><td>4,00,001 – 8,00,000</td><td>5%</td></tr>
+        <tr><td>8,00,001 – 12,00,000</td><td>10%</td></tr>
+        <tr><td>12,00,001 – 16,00,000</td><td>15%</td></tr>
+        <tr><td>16,00,001 – 20,00,000</td><td>20%</td></tr>
+        <tr><td>20,00,001 – 24,00,000</td><td>25%</td></tr>
+        <tr><td>Above 24,00,000</td><td>30%</td></tr>
+      </tbody>
+    </table>
+  </section>
 
-    const newRegimeSlabs = [
-      [400000, 0.00],
-      [800000, 0.05],
-      [1200000, 0.10],
-      [1600000, 0.15],
-      [2000000, 0.20],
-      [2400000, 0.25],
-      [Infinity, 0.30]
-    ];
+  <section>
+    <h2>Key Rules to Remember</h2>
+    <ul>
+      <li>The New Regime is the default tax regime from FY 2023–24 onward.</li>
+      <li>To opt for the Old Regime, taxpayers must submit Form 10-IEA while filing their returns.</li>
+      <li>Salaried individuals can switch regimes every financial year.</li>
+      <li>Senior citizens (above 60 years) get higher exemption limits under certain deductions.</li>
+      <li>Taxpayers opting for the New Regime cannot claim popular deductions like 80C, 80D, HRA, LTA, etc.</li>
+      <li>Choose the regime that best aligns with your income, investment habits, and financial goals.</li>
+    </ul>
+  </section>
 
-    const oldRegimeSlabs = [
-      [250000, 0.00],
-      [500000, 0.05],
-      [1000000, 0.20],
-      [Infinity, 0.30]
-    ];
-
-    function calculateTax(income, slabs, breakdownEl) {
-      let tax = 0;
-      let lastLimit = 0;
-      breakdownEl.innerHTML = '';
-      for (let [limit, rate] of slabs) {
-        if (income > limit) {
-          const taxed = (limit - lastLimit) * rate;
-          if (rate > 0) {
-            breakdownEl.innerHTML += `<li>₹${lastLimit + 1} – ₹${limit}: ${rate * 100}% = ₹${taxed.toFixed(2)}</li>`;
+  <section>
+    <h2>Comparison Chart: Old vs New Tax Regime</h2>
+    <canvas id="taxComparisonChart"></canvas>
+    <script>
+      const ctx = document.getElementById('taxComparisonChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['Standard Deduction', 'Section 80C', 'Section 80D', 'HRA', 'LTA'],
+          datasets: [
+            {
+              label: 'Old Regime',
+              data: [50000, 150000, 50000, 100000, 20000],
+              backgroundColor: 'rgba(0, 102, 153, 0.7)'
+            },
+            {
+              label: 'New Regime',
+              data: [75000, 0, 0, 0, 0],
+              backgroundColor: 'rgba(255, 159, 64, 0.7)'
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { position: 'top' },
+            title: {
+              display: true,
+              text: 'Comparison of Deductions in Old vs New Regime'
+            }
           }
-          tax += taxed;
-          lastLimit = limit;
-        } else {
-          const taxed = (income - lastLimit) * rate;
-          if (rate > 0 && income > lastLimit) {
-            breakdownEl.innerHTML += `<li>₹${lastLimit + 1} – ₹${income}: ${rate * 100}% = ₹${taxed.toFixed(2)}</li>`;
-          }
-          tax += taxed;
-          break;
         }
-      }
-      return tax;
-    }
-
-    function update() {
-      const grossIncome = parseFloat(document.getElementById('grossIncome').value);
-      const rows = document.querySelectorAll('#deductionsTable tr');
-      let totalOld = 0;
-      let totalNew = 0;
-
-      rows.forEach(row => {
-        const oldInput = row.querySelector('input[data-old]');
-        const newInput = row.querySelector('input[data-new]');
-        if (oldInput) totalOld += parseFloat(oldInput.value) || 0;
-        if (newInput) totalNew += parseFloat(newInput.value) || 0;
       });
+    </script>
+  </section>
 
-      totalOld += 50000; // Standard Deduction (Old)
-      totalNew += 75000; // Standard Deduction (New)
+  <section>
+    <h2>Frequently Asked Questions (FAQs)</h2>
+    <ul>
+      <li><strong>What is the default tax regime?</strong> From FY 2023–24 onward, the New Tax Regime is the default. If you wish to opt for the Old Regime, you must explicitly choose it while filing your tax return.</li>
+      <li><strong>Can I switch between regimes every year?</strong> Yes, salaried individuals can choose the regime every financial year.</li>
+      <li><strong>Is it mandatory to file Form 10-IEA?</strong> Yes, for opting into or out of the new regime from FY 2023–24 onward.</li>
+      <li><strong>Can I claim HRA in the new regime?</strong> No, HRA is only available under the old regime.</li>
+      <li><strong>Are NPS deductions available in the new regime?</strong> No, deductions under Section 80CCD are not available in the new regime.</li>
+      <li><strong>What is the main benefit of the new regime?</strong> Simpler structure and reduced tax rates for those who do not invest in tax-saving instruments.</li>
+    </ul>
+  </section>
 
-      const oldTaxable = Math.max(0, grossIncome - totalOld);
-      const newTaxable = Math.max(0, grossIncome - totalNew);
-
-      const oldBreakdownEl = document.getElementById('oldBreakdown');
-      const newBreakdownEl = document.getElementById('newBreakdown');
-
-      const oldTax = Math.round(calculateTax(oldTaxable, oldRegimeSlabs, oldBreakdownEl));
-      const newTax = Math.round(calculateTax(newTaxable, newRegimeSlabs, newBreakdownEl));
-
-      document.getElementById('oldTax').innerText = oldTax;
-      document.getElementById('newTax').innerText = newTax;
-      document.getElementById('oldTaxable').innerText = oldTaxable;
-      document.getElementById('newTaxable').innerText = newTaxable;
-      document.getElementById('totalOldDeduction').innerText = totalOld;
-      document.getElementById('totalNewDeduction').innerText = totalNew;
-
-      const better = oldTax < newTax ? 'Old Regime' : 'New Regime';
-      document.getElementById('betterRegime').innerText = better;
-      document.getElementById('savings').innerText = Math.abs(oldTax - newTax);
-    }
-
-    function createTable() {
-      const tbody = document.getElementById('deductionsTable');
-
-      const standardRow = document.createElement('tr');
-      standardRow.innerHTML = `
-        <td>Standard Deduction</td>
-        <td>Fixed</td>
-        <td>₹50,000</td>
-        <td>₹75,000</td>
-      `;
-      tbody.appendChild(standardRow);
-
-      deductionList.forEach(d => {
-        const tr = document.createElement('tr');
-        const oldInput = typeof d.limit === 'number' || d.limit.toString().startsWith('₹')
-          ? `<input type="number" data-old value="0" max="${parseFloat(d.limit) || ''}" >`
-          : `<input type="number" data-old value="0" >`;
-
-        const newInput = d.name.includes('80C') || d.name.includes('80D') || d.name.includes('NPS') || d.name.includes('Home Loan')
-          ? 'NA'
-          : (typeof d.limit === 'number' || d.limit.toString().startsWith('₹')
-            ? `<input type="number" data-new value="0" max="${parseFloat(d.limit) || ''}" >`
-            : `<input type="number" data-new value="0" >`);
-
-        tr.innerHTML = `
-          <td>${d.name}</td>
-          <td>${d.limit}</td>
-          <td>${oldInput}</td>
-          <td>${newInput}</td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
-
-    createTable();
-  </script>
+  <section>
+    <h2>Which Tax Regime is Better for You?</h2>
+    <p>The choice between Old and New Tax Regime depends on your income, savings, and eligible deductions. If you claim high deductions (like HRA, 80C, 80D), the Old Regime may help save more tax. However, if you prefer simplicity without making investments, the New Regime could be beneficial.</p>
+    <p>Use our <a href="calculate.html">Income Tax Comparator</a> to see which regime saves you more!</p>
+  </section>
   <script type='text/javascript' src='//pl26447378.profitableratecpm.com/7c/a5/44/7ca54480cceb86f7f9db4c6a97b90e43.js'></script>
 </body>
 </html>
